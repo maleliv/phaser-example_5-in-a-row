@@ -12,6 +12,7 @@ window.onload = () => {
 }
 
 class Game extends Phaser.Scene {
+
     constructor() {
 
         super('Game');
@@ -33,7 +34,7 @@ class Game extends Phaser.Scene {
     }
 
     preload() {
-        
+
         this.load.image('field', 'Assets/Sprites/soccet.png');
 
         this.load.spritesheet('circle',
@@ -45,10 +46,8 @@ class Game extends Phaser.Scene {
             'Assets/Sprites/cross_spritesheet.png',
             { frameWidth: 64, frameHeight: 64 }
         );
-        
+
     }
-
-
 
     create() {
 
@@ -59,7 +58,6 @@ class Game extends Phaser.Scene {
 
         this.cameras.main.setBounds(-1024, -1024, 1024 * 2, 1024 * 2);
         mainCamera.setBackgroundColor(4349639);
-
 
         this.anims.create({
             key: 'createdCircle',
@@ -74,7 +72,7 @@ class Game extends Phaser.Scene {
             frameRate: 20,
             repeat: 0
         });
-        
+
     }
 
     //Строим поле из массива
@@ -94,7 +92,6 @@ class Game extends Phaser.Scene {
                         let spr = this.add.sprite(i * 64 + offsetCenter[0], n * 64 + offsetCenter[1], 'circle', 5).setOrigin(0);
                         this.groupField.push(spr);
                     }
-                    
                 }
 
                 let sprite = this.add.sprite(i * 64 + offsetCenter[0], n * 64 + offsetCenter[1], 'field').setOrigin(0);
@@ -116,13 +113,15 @@ class Game extends Phaser.Scene {
             }
         }
 
+
     }
 
     setCamera() {
-        
+
         let zoom = this.zoom;
 
         switch (zoom) {
+
             case 1: {
                 this.cameras.main.setZoom(1);
                 this.cameras.main.centerOn(this.centralSprite.x - 64, this.centralSprite.y - 64);
@@ -134,6 +133,7 @@ class Game extends Phaser.Scene {
                 break;
             }
             case 3: {
+
                 this.cameras.main.setZoom(0.65);
                 this.cameras.main.centerOn(this.centralSprite.x - 128, this.centralSprite.y - 128);
                 break;
@@ -147,7 +147,9 @@ class Game extends Phaser.Scene {
                 this.cameras.main.setZoom(1);
                 this.cameras.main.centerOn(this.centralSprite.x, this.centralSprite.y);
             }
+
         }
+
     }
 
     //Строим начальный массив поля
@@ -156,17 +158,23 @@ class Game extends Phaser.Scene {
         let field = [];
 
         for (let i = 0; i < this.sizeOfField; i++) {
+
             field[i] = [];
+
             for (let n = 0; n < this.sizeOfField; n++) {
                 field[i][n] = 0;
             }
+
         }
-        
         return field;
 
     }
 
-    //Расширяем поле добавляя в массив элементы и перестраиваем
+
+
+
+
+    //Расширяем поле добавляя в массив элементы и перестраивая поле
     extendFied(add = 3) {
 
         if (this.filled > (Math.pow(this.sizeOfField, 2) * 0.6)) {
@@ -192,6 +200,7 @@ class Game extends Phaser.Scene {
             this.sizeOfField += add;
             this.offsetCenter[0] = this.firstSprite.x;
             this.offsetCenter[1] = this.firstSprite.y;
+
         }
 
     }
@@ -199,6 +208,7 @@ class Game extends Phaser.Scene {
     setPlayerMove(gameObject, pos) {
 
         if (!this.playerTurn) return;
+
         if (typeof gameObject !== 'object') return;
 
         if (this.field[pos[1]][pos[0]] === 0) {
@@ -213,6 +223,7 @@ class Game extends Phaser.Scene {
             this.filled++;
             this.extendFied();
 
+
             this.isWin(pos[1], pos[0], 'player');
 
             this.setBotMove();
@@ -224,6 +235,7 @@ class Game extends Phaser.Scene {
 
         let posX = -1;
         let posY = -1;
+
 
         if (this.botNextMove.x > -1) {
             posX = this.botNextMove.x;
@@ -341,7 +353,10 @@ class Game extends Phaser.Scene {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
+
 }
+
+
 
 class GameEnded extends Phaser.Scene {
 
@@ -350,27 +365,28 @@ class GameEnded extends Phaser.Scene {
         this.info = null;
     }
 
+
     init(data) {
         this.info = data;
     }
 
     preload() {
-
         this.load.image('field', 'Assets/Sprites/soccet.png');
-        
+
+
         this.load.spritesheet('buttonAgain',
             'Assets/Sprites/button_repeat.png',
             { frameWidth: 400, frameHeight: 80 }
         );
-        
+
         this.load.spritesheet('particles',
             'Assets/Sprites/paticles_spritesheet.png',
             { frameWidth: 16, frameHeight: 20 }
         );
-
     }
 
     create() {
+
 
         if (this.info.winner == 'player') {
 
@@ -396,7 +412,7 @@ class GameEnded extends Phaser.Scene {
                 speed: 90,
                 gravityY: 40,
                 tint: [0xffff00, 0xff0000, 0x00ff00, 0x0000ff],
-                lifespan: 6000,
+                lifespan: 10000,
                 quantity: 20,
                 scale: { start: 0.4, end: 1 },
                 blendMode: 'ADD'
@@ -409,7 +425,7 @@ class GameEnded extends Phaser.Scene {
                 speed: 450,
                 gravityY: 150,
                 tint: [0xffff00, 0xff0000, 0x00ff00, 0x0000ff],
-                lifespan: 6000,
+                lifespan: 10000,
                 quantity: 10,
                 scale: { start: 0.4, end: 1.2 },
                 blendMode: 'ADD'
@@ -422,7 +438,7 @@ class GameEnded extends Phaser.Scene {
                 speed: 450,
                 gravityY: 100,
                 tint: [0xffff00, 0xff0000, 0x00ff00, 0x0000ff],
-                lifespan: 6000,
+                lifespan: 10000,
                 quantity: 10,
                 scale: { start: 0.4, end: 1.2 },
                 blendMode: 'ADD'
@@ -435,10 +451,10 @@ class GameEnded extends Phaser.Scene {
                 emitter4.stop();
             }, 500);
 
-            this.add.text(245, 150, 'ПОБЕДА!', { fontFamily: 'Microsoft YaHei UI, "Goudy Bookletter 1911", Times, serif', fontSize: '70px' });
+            this.add.text(245, 150, 'ПОБЕДА!', { fontFamily: '"Microsoft YaHei UI", "Goudy Bookletter 1911", Times, serif', fontSize: '70px' });
 
         } else {
-            this.add.text(200, 150, 'ИИ Победил', { fontFamily: 'Microsoft YaHei UI, "Goudy Bookletter 1911", Times, serif', fontSize: '70px' });
+            this.add.text(200, 150, 'ИИ Победил', { fontFamily: '"Microsoft YaHei UI", "Goudy Bookletter 1911", Times, serif', fontSize: '70px' });
         }
 
         let buttonRepeat = this.add.sprite(400, 450, 'buttonAgain');
@@ -455,9 +471,6 @@ class GameEnded extends Phaser.Scene {
             this.game.scene.add('Game', Game, true);
             this.scene.start('Game');
         });
-
     }
 
 }
-
-

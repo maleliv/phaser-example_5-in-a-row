@@ -11,8 +11,6 @@ window.onload = () => {
     const game = new Phaser.Game(config);
 }
 
-
-
 class Game extends Phaser.Scene {
     constructor() {
 
@@ -34,12 +32,8 @@ class Game extends Phaser.Scene {
 
     }
 
-
-
-
-
-
     preload() {
+        
         this.load.image('field', 'Assets/Sprites/soccet.png');
 
         this.load.spritesheet('circle',
@@ -51,8 +45,7 @@ class Game extends Phaser.Scene {
             'Assets/Sprites/cross_spritesheet.png',
             { frameWidth: 64, frameHeight: 64 }
         );
-
-
+        
     }
 
 
@@ -81,13 +74,11 @@ class Game extends Phaser.Scene {
             frameRate: 20,
             repeat: 0
         });
-
-
+        
     }
 
     //Строим поле из массива
     createField(size = 5, offsetCenter = [0, 0]) {
-
 
         this.groupField.forEach(el => el.destroy());
 
@@ -103,10 +94,10 @@ class Game extends Phaser.Scene {
                         let spr = this.add.sprite(i * 64 + offsetCenter[0], n * 64 + offsetCenter[1], 'circle', 5).setOrigin(0);
                         this.groupField.push(spr);
                     }
+                    
                 }
 
                 let sprite = this.add.sprite(i * 64 + offsetCenter[0], n * 64 + offsetCenter[1], 'field').setOrigin(0);
-
 
                 if (n === 0 && i === 0) {
                     this.zoom++;
@@ -125,10 +116,10 @@ class Game extends Phaser.Scene {
             }
         }
 
-
     }
 
     setCamera() {
+        
         let zoom = this.zoom;
 
         switch (zoom) {
@@ -143,7 +134,6 @@ class Game extends Phaser.Scene {
                 break;
             }
             case 3: {
-
                 this.cameras.main.setZoom(0.65);
                 this.cameras.main.centerOn(this.centralSprite.x - 128, this.centralSprite.y - 128);
                 break;
@@ -166,22 +156,17 @@ class Game extends Phaser.Scene {
         let field = [];
 
         for (let i = 0; i < this.sizeOfField; i++) {
-
             field[i] = [];
-
             for (let n = 0; n < this.sizeOfField; n++) {
                 field[i][n] = 0;
             }
         }
+        
         return field;
 
     }
 
-
-
-
-
-    //Расширяем поле добавляя в массив элементы и перестраивая поле
+    //Расширяем поле добавляя в массив элементы и перестраиваем
     extendFied(add = 3) {
 
         if (this.filled > (Math.pow(this.sizeOfField, 2) * 0.6)) {
@@ -207,18 +192,13 @@ class Game extends Phaser.Scene {
             this.sizeOfField += add;
             this.offsetCenter[0] = this.firstSprite.x;
             this.offsetCenter[1] = this.firstSprite.y;
-
-
         }
 
-
     }
-
 
     setPlayerMove(gameObject, pos) {
 
         if (!this.playerTurn) return;
-
         if (typeof gameObject !== 'object') return;
 
         if (this.field[pos[1]][pos[0]] === 0) {
@@ -233,7 +213,6 @@ class Game extends Phaser.Scene {
             this.filled++;
             this.extendFied();
 
-
             this.isWin(pos[1], pos[0], 'player');
 
             this.setBotMove();
@@ -241,20 +220,15 @@ class Game extends Phaser.Scene {
 
     }
 
-
-
-
     setBotMove() {
 
         let posX = -1;
         let posY = -1;
 
-
         if (this.botNextMove.x > -1) {
             posX = this.botNextMove.x;
             posY = this.botNextMove.y;
         }
-
 
         const getRandomPosition = () => {
 
@@ -308,7 +282,6 @@ class Game extends Phaser.Scene {
 
         if (!symbol) return false;
 
-
         const checkLine = (x, y, dx, dy, symbol, mover) => {
 
             let sx = x - dx;
@@ -349,7 +322,6 @@ class Game extends Phaser.Scene {
 
         }
 
-
         let res;
 
         res = res || checkLine(y, x, 1, 0, symbol, mover);
@@ -359,14 +331,7 @@ class Game extends Phaser.Scene {
 
         return res;
 
-
-
-
     }
-
-
-
-
 
     getSymbol(y, x) {
         return this.field[x] && this.field[x][y] ? this.field[x][y] : false;
@@ -376,10 +341,7 @@ class Game extends Phaser.Scene {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-
 }
-
-
 
 class GameEnded extends Phaser.Scene {
 
@@ -388,7 +350,6 @@ class GameEnded extends Phaser.Scene {
         this.info = null;
     }
 
-
     init(data) {
         this.info = data;
     }
@@ -396,13 +357,12 @@ class GameEnded extends Phaser.Scene {
     preload() {
 
         this.load.image('field', 'Assets/Sprites/soccet.png');
-
-
+        
         this.load.spritesheet('buttonAgain',
             'Assets/Sprites/button_repeat.png',
             { frameWidth: 400, frameHeight: 80 }
         );
-
+        
         this.load.spritesheet('particles',
             'Assets/Sprites/paticles_spritesheet.png',
             { frameWidth: 16, frameHeight: 20 }
@@ -411,7 +371,6 @@ class GameEnded extends Phaser.Scene {
     }
 
     create() {
-
 
         if (this.info.winner == 'player') {
 
@@ -469,9 +428,6 @@ class GameEnded extends Phaser.Scene {
                 blendMode: 'ADD'
             });
 
-
-
-
             setTimeout(() => {
                 emitter.stop();
                 emitter2.stop();
@@ -482,32 +438,23 @@ class GameEnded extends Phaser.Scene {
             this.add.text(245, 150, 'ПОБЕДА!', { fontFamily: 'Microsoft YaHei UI, "Goudy Bookletter 1911", Times, serif', fontSize: '70px' });
 
         } else {
-
             this.add.text(200, 150, 'ИИ Победил', { fontFamily: 'Microsoft YaHei UI, "Goudy Bookletter 1911", Times, serif', fontSize: '70px' });
-
         }
 
         let buttonRepeat = this.add.sprite(400, 450, 'buttonAgain');
         buttonRepeat.setInteractive();
 
-
         let mainCamera = this.cameras.main.setSize(800, 600).setName('mainCamera');
         mainCamera.setBackgroundColor(4349639);
-
 
         buttonRepeat.on('pointerover', () => buttonRepeat.setTexture('buttonAgain', 1));
         buttonRepeat.on('pointerout', () => buttonRepeat.setTexture('buttonAgain', 0));
 
         buttonRepeat.on('pointerdown', () => {
-
             this.game.scene.remove('Game');
             this.game.scene.add('Game', Game, true);
             this.scene.start('Game');
-
         });
-
-
-
 
     }
 
